@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taiko Controller v2</title>
+  <link rel="stylesheet" href="./web/display_v2.css">
+</head>
+<body>
+  <main class="page">
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Live Input</p>
+            <h1>Gamepad Diagnostics</h1>
+          </div>
+          <div id="deviceName" class="device-name">No Device Detected</div>
+        </div>
+
+        <div id="gamepadStatus" class="status status-idle">Waiting for input... Press any button to initialize.</div>
+
+        <div class="section">
+          <div class="section-title">Axis Output</div>
+          <div id="diagnostics" class="axis-list">
+            <p class="empty">Waiting for axis data...</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Button Output</div>
+          <div id="buttonDiagnostics" class="button-grid">
+            <p class="empty">No buttons detected.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Web Serial</p>
+            <h2>Settings Editor</h2>
+          </div>
+          <div id="serialStatus" class="status status-idle">Disconnected</div>
+        </div>
+
+        <div id="storageAlert" class="alert hidden"></div>
+
+        <div class="controls" style="margin-top: 10px;">
+          <button id="connectButton" type="button" class="primary">Connect</button>
+          <button id="refreshButton" type="button" class="ghost">Refresh</button>
+          <button id="saveButton" type="button" class="primary">Save</button>
+          <button id="factoryResetButton" type="button" class="danger">Repair Storage</button>
+        </div>
+
+        <div class="stack">
+          <section class="card current-card">
+            <div class="card-head">
+              <h3 class="card-title">Current Settings</h3>
+              <span class="muted">Editable</span>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <div class="field-row">
+                  <label for="currentDeadzone">Deadzone</label>
+                  <div class="field">
+                    <input id="currentDeadzone" type="range" min="0" max="50" value="8">
+                    <small><span id="currentDeadzoneValue">8</span> (0-50)</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="field-row">
+                  <label>Invert Axis</label>
+                  <div class="checkbox-grid">
+                    <label><input id="currentInvert0" type="checkbox"> AX 0</label>
+                    <label><input id="currentInvert1" type="checkbox"> AX 1</label>
+                    <label><input id="currentInvert2" type="checkbox"> AX 2</label>
+                    <label><input id="currentInvert3" type="checkbox"> AX 3</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="field-row">
+                  <label>Impact Threshold</label>
+                  <div class="settings-table">
+                    <div class="settings-table-head">
+                      <div>Axis</div>
+                      <div>Threshold</div>
+                      <div>Press Ticks</div>
+                      <div>Refractory</div>
+                    </div>
+                    <div class="settings-table-row">
+                      <div>AX 0</div>
+                      <input id="currentThreshold0" type="number" min="0" max="255" value="0">
+                      <input id="currentPressTicks0" type="number" min="1" max="255" value="1">
+                      <input id="currentRefractory0" type="number" min="1" max="255" value="1">
+                    </div>
+                    <div class="settings-table-row">
+                      <div>AX 1</div>
+                      <input id="currentThreshold1" type="number" min="0" max="255" value="0">
+                      <input id="currentPressTicks1" type="number" min="1" max="255" value="1">
+                      <input id="currentRefractory1" type="number" min="1" max="255" value="1">
+                    </div>
+                    <div class="settings-table-row">
+                      <div>AX 2</div>
+                      <input id="currentThreshold2" type="number" min="0" max="255" value="0">
+                      <input id="currentPressTicks2" type="number" min="1" max="255" value="1">
+                      <input id="currentRefractory2" type="number" min="1" max="255" value="1">
+                    </div>
+                    <div class="settings-table-row">
+                      <div>AX 3</div>
+                      <input id="currentThreshold3" type="number" min="0" max="255" value="0">
+                      <input id="currentPressTicks3" type="number" min="1" max="255" value="1">
+                      <input id="currentRefractory3" type="number" min="1" max="255" value="1">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card defaults-card">
+            <div class="card-head">
+              <h3 class="card-title">Factory Defaults</h3>
+              <span class="muted">Read-only</span>
+            </div>
+
+            <div class="defaults-grid">
+              <div class="defaults-summary">
+                <div class="defaults-item">
+                  Deadzone
+                  <span id="defaultDeadzone">Loading...</span>
+                </div>
+                <div class="defaults-item">
+                  Invert
+                  <span id="defaultInvert">Loading...</span>
+                </div>
+              </div>
+
+              <div class="defaults-summary">
+                <div class="defaults-item">
+                  Thresholds
+                  <span id="defaultThresholds">Loading...</span>
+                </div>
+                <div class="defaults-item">
+                  Press Ticks
+                  <span id="defaultPressTicks">Loading...</span>
+                </div>
+              </div>
+
+              <div class="defaults-item">
+                Refractory
+                <span id="defaultRefractory">Loading...</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="./web/display_v2.js"></script>
+</body>
+</html>
