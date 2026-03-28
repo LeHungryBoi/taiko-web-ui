@@ -1,6 +1,6 @@
 # taiko-web-ui
 
-> **wui** — short for **w**eb **u**ser **i**nterface
+> **wui** — short for **taiko-web-ui**
 
 Web UI for [Taiko-C](https://github.com/LeHungryBoi/Taiko-C) drum controller — real-time sensor display and configuration.
 
